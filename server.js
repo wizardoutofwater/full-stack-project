@@ -4,7 +4,7 @@ const db = require("./models");
 const crypto = require("crypto");
 const pbkdf2 = require("pbkdf2");
 const session = require("express-session");
-const exphbs = require("express-handlebars");
+const handlebars = require("express-handlebars");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     HighSchool_id: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'Alumni',
+    modelName: 'alumni',
   });
   return Alumni;
 };
