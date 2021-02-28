@@ -16,14 +16,26 @@ app.engine(
   handlebars({
     layoutsDir: __dirname + "/views/layouts",
     extname: "hbs",
-    defaultLayout: "default",
-    partialsDir: "/views/partials/",
+    defaultLayout: "index",
+    partialsDir: __dirname + "/views/partials",
   })
 );
 // Serve Static css/image files
 app.use(express.static("public"));
 
+// test route for HBS
 
+app.get('/', (req, res) => {
+  res.render("home", {active: {home: true}});
+})
+
+app.get('/login', (req, res) => {
+  res.render("login", {active: {login: true }});
+})
+
+app.get('/search', (req, res) => {
+  res.render("search", {active: {search: true }});
+})
 // -----Routes-----
 app.get("/api", function (request, response, next) {
   console.log("someone sent a request home");
@@ -40,8 +52,11 @@ app.get("/api/login", function (request, response, next) {
   response.send();
 });
 
+// GET All schools
 app.get("/api/school", function (request, response, next) {
-  console.log("someone sent a request home");
+  db.highschool.findAll().then((results) => {
+    res.send(results);
+  })
   response.send();
 });
 app.get("/api/school/:id", function (request, response, next) {
