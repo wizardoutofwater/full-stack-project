@@ -166,6 +166,13 @@ body {
 .mastfoot {
   color: rgba(255, 255, 255, 0.5);
 }
+.mastfoot p {
+    font-family: "Raleway", sans-serif;
+} 
+.mastfoot a {
+    font-family: "Abril Fatface", cursive;
+    color:#CFDBD5
+} 
 
 /* Animation */
 .content-wrapper {
