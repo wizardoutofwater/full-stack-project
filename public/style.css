@@ -47,8 +47,8 @@ a:hover {
 .btn-secondary:focus {
   color: #333;
   text-shadow: none; /* Prevent inheritance from `body` */
-  background-color: #fff;
-  border: 0.05rem solid #fff;
+  background-color: #e8eddf;
+  border: 0.05rem solid #CFDBD5;
 }
 
 /*
@@ -56,10 +56,12 @@ a:hover {
  */
 .brand {
   font-family: "Abril Fatface", cursive;
+ 
 }
 .lead,
 .nav-link {
   font-family: "Raleway", sans-serif;
+  font-weight: 500;
 }
 
 html,
@@ -67,26 +69,60 @@ body {
   height: 100%;
   background-color: transparent;
 }
-
+.cover-heading{
+    font-family: "Raleway", sans-serif;
+    font-weight: bold;
+}
 body {
   display: -ms-flexbox;
   display: flex;
   color: #e8eddf;
   text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.671);
+  /* box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.671); */
 }
 
 .dark-bg {
   background-color: #242423;
 }
+.shadow-dreamy {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07), 
+                0 2px 4px rgba(0,0,0,0.07), 
+                0 4px 8px rgba(0,0,0,0.07), 
+                0 8px 16px rgba(0,0,0,0.07),
+                0 16px 32px rgba(0,0,0,0.07), 
+                0 32px 64px rgba(0,0,0,0.07);
+}
+.shadow-6 {
+    box-shadow: 0 1px 1px rgba(0,0,0,0.11), 
+                0 2px 2px rgba(0,0,0,0.11), 
+                0 4px 4px rgba(0,0,0,0.11), 
+                0 8px 8px rgba(0,0,0,0.11), 
+                0 16px 16px rgba(0,0,0,0.11), 
+                0 32px 32px rgba(0,0,0,0.11);
+  }
 
 .cover-container {
   max-width: 42em;
+}
+.blur-container {
+    /* border: 0.05rem solid #CFDBD5;
+     border-radius: 2em; */
+    /* -webkit-backdrop-filter: blur(4px); */
+    /* backdrop-filter: blur(4px); */
 }
 
 /* Forms + Inputs */
 .form-control:focus {
   box-shadow: none;
+}
+
+.loginForm {
+    border: 0.05rem solid #CFDBD5;
+    border-radius: 2em;
+}
+
+@media only screen and (max-width: 600px) {
+    .loginForm {border: none;}
 }
 
 .form-control-underlined {
@@ -114,7 +150,7 @@ body {
 
 .nav-masthead .nav-link {
   padding: 0.25rem 0;
-  font-weight: 700;
+  font-weight: bold;
   color: rgba(255, 255, 255, 0.5);
   background-color: transparent;
   border-bottom: 0.25rem solid transparent;
@@ -178,7 +214,7 @@ body {
 .content-wrapper {
   position: relative;
   z-index: 1;
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.671);
+  /* box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.671); */
 }
 .bg-animation {
   display: block;
