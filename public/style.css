@@ -104,14 +104,15 @@ body {
 .cover-container {
   max-width: 42em;
 }
-.blur-container {
-    /* border: 0.05rem solid #CFDBD5;
-     border-radius: 2em; */
-    /* -webkit-backdrop-filter: blur(4px); */
-    /* backdrop-filter: blur(4px); */
-}
+/* .blur-container {
+    border: 0.05rem solid #CFDBD5;
+     border-radius: 2em; 
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+} */
 
 /* Forms + Inputs */
+
 .form-control:focus {
   box-shadow: none;
 }
