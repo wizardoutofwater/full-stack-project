@@ -14,7 +14,7 @@
     </div>
   </form>
   {{#if listExists}} 
-  <ul class="list-unstyled">
+  <ul class="list-unstyled ">
     {{#each schools}}
        <li> <a href="/schools/{{this.id}}">{{this.name}} - {{this.city}},{{this.state}}</a></li>
     {{/each}}
@@ -26,7 +26,7 @@
 
 <script>
   $(document).ready(function () {
-    $("#searchButton").click(function (event) {
+    $("#searchButton").click((event) => {
       event.preventDefault();
       let $searchString = $("#search-input").val();
       $("#searchForm").attr('action', "/search/" + $searchString);

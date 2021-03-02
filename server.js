@@ -26,39 +26,39 @@ app.use(express.static("public"));
 
 // test route for HBS
 
-app.get('/', (req, res) => {
-  res.render("home", {active: {home: true}});
-})
-
-app.get('/login', (req, res) => {
-  res.render("login", {active: {login: true }});
-})
-
-app.get('/search', (req, res) => {
-  res.render("search", {active: {search: true }});
+app.get("/", (req, res) => {
+  res.render("home", { active: { home: true } });
 });
 
-app.get('/search/:name', (req, res) => {
+app.get("/login", (req, res) => {
+  res.render("login", { active: { login: true } });
+});
+
+app.get("/search", (req, res) => {
+  res.render("search", { active: { search: true } });
+});
+
+app.get("/search/:name", (req, res) => {
   let schoolName = req.params.name;
   // console.log(schoolName);
-  db.highschool.findAll({
-    where: {
-      name: {
-        [Op.iLike]: `%${schoolName}%`
-      }
-    }
-  }).then((results) => {
-    schools = results.map((school) => school.toJSON());
-    console.log(schools);
-    res.render("search",{
-      schools: schools,
-      listExists: true,
-      active: {search: true}
-
+  db.highschool
+    .findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${schoolName}%`,
+        },
+      },
     })
-  });
-
-})
+    .then((results) => {
+      schools = results.map((school) => school.toJSON());
+      console.log(schools);
+      res.render("search", {
+        schools: schools,
+        listExists: true,
+        active: { search: true },
+      });
+    });
+});
 // -----Routes-----
 app.get("/api", function (request, response, next) {
   console.log("someone sent a request home");
@@ -79,7 +79,7 @@ app.get("/api/login", function (request, response, next) {
 app.get("/api/school", function (request, response, next) {
   db.highschool.findAll().then((results) => {
     res.send(results);
-  })
+  });
   response.send();
 });
 app.get("/api/school/:id", function (request, response, next) {
