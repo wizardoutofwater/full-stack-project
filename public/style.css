@@ -124,7 +124,8 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-    .loginForm {border: none;}
+    /* .loginForm {border: none;} */
+    .loginForm h1 {font-size: larger; margin-top: .025em;}
 }
 
 .form-control-underlined {
