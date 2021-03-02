@@ -13,10 +13,11 @@
       </div>
     </div>
   </form>
+
   {{#if listExists}} 
-  <ul class="list-unstyled">
+  <ul>
     {{#each schools}}
-       <li> <a href="/schools/{{this.id}}">{{this.name}} - {{this.city}},{{this.state}}</a></li>
+      <li href="/schools/{{this.id}}">{{this.name}} - {{this.city}},{{this.state}}</li>
     {{/each}}
   </ul>
 {{/if}}

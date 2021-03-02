@@ -48,8 +48,15 @@ app.get('/search/:name', (req, res) => {
       }
     }
   }).then((results) => {
-    res.send(results);
-  })
+    schools = results.map((school) => school.toJSON());
+    console.log(schools);
+    res.render("search",{
+      schools: schools,
+      listExists: true,
+      active: {search: true}
+
+    })
+  });
 
 })
 // -----Routes-----

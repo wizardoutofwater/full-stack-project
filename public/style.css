@@ -11,7 +11,7 @@
 a,
 a:focus,
 a:hover {
-  color: #fff;
+  color: #e8eddf;
 }
 
 /* Custom default button */
@@ -68,6 +68,7 @@ html,
 body {
   height: 100%;
   background-color: transparent;
+  font-family: "Raleway", sans-serif;
 }
 .cover-heading{
     font-family: "Raleway", sans-serif;
@@ -137,6 +138,10 @@ body {
 .form-control-underlined:focus {
   background-color: transparent;
   border-color: #f5cb5c;
+}
+
+.input:-internal-autofill-selected{
+  background-color: transparent;
 }
 /*
  * Header
