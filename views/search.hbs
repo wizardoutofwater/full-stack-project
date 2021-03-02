@@ -24,13 +24,3 @@
   {{> footer}}
 </div>
 
-<script>
-  $(document).ready(function () {
-    $("#searchButton").click((event) => {
-      event.preventDefault();
-      let $searchString = $("#search-input").val();
-      $("#searchForm").attr('action', "/search/" + $searchString);
-      $("#searchForm").submit();
-    });
-  });
-</script>
