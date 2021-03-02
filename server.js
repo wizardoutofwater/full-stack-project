@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const pbkdf2 = require("pbkdf2");
 const session = require("express-session");
 const handlebars = require("express-handlebars");
+const { Op } = require("sequelize");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,6 +36,21 @@ app.get('/login', (req, res) => {
 
 app.get('/search', (req, res) => {
   res.render("search", {active: {search: true }});
+});
+
+app.get('/search/:name', (req, res) => {
+  let schoolName = req.params.name;
+  // console.log(schoolName);
+  db.highschool.findAll({
+    where: {
+      name: {
+        [Op.iLike]: `%${schoolName}%`
+      }
+    }
+  }).then((results) => {
+    res.send(results);
+  })
+
 })
 // -----Routes-----
 app.get("/api", function (request, response, next) {
