@@ -50,6 +50,9 @@ app.get("/search/:name", (req, res) => {
       },
     })
     .then((results) => {
+
+    if(results !== undefined && results.length != 0) {
+      // console.log(results);
       schools = results.map((school) => school.toJSON());
       console.log(schools);
       res.render("search", {
@@ -57,6 +60,9 @@ app.get("/search/:name", (req, res) => {
         listExists: true,
         active: { search: true },
       });
+    } else {
+      res.status(404).send(`No School found matching ${schoolName}`)
+    }
     });
 });
 // -----Routes-----
@@ -104,3 +110,11 @@ app.post("/api/school", function (request, response, next) {
 app.listen(3000, function () {
   console.log("listening in port 3000");
 });
+
+
+// if(!schools) {
+//   console.log ('got results!')
+//   res.status(401).send('No Matching Schools Found');
+//   alert(`No Schools Found matching ${schoolName}`);
+//   return;
+// }
