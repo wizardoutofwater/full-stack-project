@@ -12,9 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       highschool.associate = function(models) {
         highschool.hasMany(models.alumni, {
-          foreignKey: 'HighSchool_id'
+          foreignKey: 'highschool_id'
         });
       }
+      highschool.hasMany(models.thread, {
+        foreignKey: "highschool_id",
+        onDelete: 'CASCADE'
+      });
     }
   };
   highschool.init({
