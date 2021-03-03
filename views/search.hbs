@@ -1,5 +1,5 @@
 <div class="cover-container content-wrapper d-flex w-100 h-100 p-3 mx-auto flex-column">
-  {{> navBar}}
+  {{> navbar}}
 
   <form id="searchForm" action="">
     <div class="row mb-4">
@@ -13,24 +13,10 @@
       </div>
     </div>
   </form>
-  {{#if listExists}} 
-  <ul class="list-unstyled ">
-    {{#each schools}}
-       <li> <a href="/schools/{{this.id}}">{{this.name}} - {{this.city}},{{this.state}}</a></li>
-    {{/each}}
-  </ul>
-{{/if}}
+<div id = "searchResults">
+
+</div>
 
   {{> footer}}
 </div>
 
-<script>
-  $(document).ready(function () {
-    $("#searchButton").click((event) => {
-      event.preventDefault();
-      let $searchString = $("#search-input").val();
-      $("#searchForm").attr('action', "/search/" + $searchString);
-      $("#searchForm").submit();
-    });
-  });
-</script>
