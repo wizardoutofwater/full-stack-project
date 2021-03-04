@@ -72,6 +72,7 @@ app.post('/sign-up', (req, res) => {
 })
 
 // Search Route
+
 app.get("/api/search/:name", (req, res) => {
   let schoolName = req.params.name;
   db.highschool
