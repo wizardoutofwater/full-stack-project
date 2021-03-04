@@ -24,8 +24,19 @@ app.engine(
 // Serve Static css/image files
 app.use(express.static("public"));
 
-// test route for HBS
+// Encryption 
+function encryptPassword(password, pass_salt) {
+  var salt = pass_salt ? pass_salt : crypto.randomBytes(20).toString('hex');
+  var key = pbkdf2.pbkdf2Sync(
+    password, salt, 36000, 256, 'sha256'
+  );
 
+  var hash = key.toString('hex');
+
+  return `$${salt}$${hash}`;
+}
+// ------TEST ROUTES (NEED TO BE INCORPORATED INTO FINAL ROUTES)------
+// Main Page Routes
 app.get("/", (req, res) => {
   res.render("home", { active: { home: true } });
 });
@@ -38,9 +49,31 @@ app.get("/search", (req, res) => {
   res.render("search", { active: { search: true } });
 });
 
-app.get("/search/:name", (req, res) => {
+// Sign-Up Routes
+
+app.get("/sign-up", (req, res) => {
+  res.render ("sign-up");
+});
+
+app.post('/sign-up', (req, res) => {
+  console.log(req.body);
+  if(req.body.username && req.body.password) {
+    db.user.create(
+      {
+        username: req.body.username, 
+        password: encryptPassword(req.body.password)
+      }
+      ).then((user) => {
+      res.redirect("/login");
+    })
+  } else {
+    res.send(' please send username and password.');
+  }
+})
+
+// Search Route
+app.get("/api/search/:name", (req, res) => {
   let schoolName = req.params.name;
-  // console.log(schoolName);
   db.highschool
     .findAll({
       where: {
@@ -50,21 +83,23 @@ app.get("/search/:name", (req, res) => {
       },
     })
     .then((results) => {
-
     if(results !== undefined && results.length != 0) {
       // console.log(results);
       schools = results.map((school) => school.toJSON());
       console.log(schools);
-      res.render("search", {
-        schools: schools,
-        listExists: true,
-        active: { search: true },
-      });
+      res.json(schools)
+      // res.render("search", {
+      //   schools: schools,
+      //   listExists: true,
+      //   active: { search: true },
+      // });
     } else {
-      res.status(404).send(`No School found matching ${schoolName}`)
+      res.status(404).json(`No School found matching ${schoolName}`)
     }
     });
 });
+
+
 // -----Routes-----
 app.get("/api", function (request, response, next) {
   console.log("someone sent a request home");
@@ -112,9 +147,3 @@ app.listen(3000, function () {
 });
 
 
-// if(!schools) {
-//   console.log ('got results!')
-//   res.status(401).send('No Matching Schools Found');
-//   alert(`No Schools Found matching ${schoolName}`);
-//   return;
-// }
