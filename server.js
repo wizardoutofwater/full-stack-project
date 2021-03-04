@@ -38,7 +38,7 @@ app.get("/search", (req, res) => {
   res.render("search", { active: { search: true } });
 });
 
-app.get("/search/:name", (req, res) => {
+app.get("/api/search/:name", (req, res) => {
   let schoolName = req.params.name;
   // console.log(schoolName);
   db.highschool
@@ -50,18 +50,20 @@ app.get("/search/:name", (req, res) => {
       },
     })
     .then((results) => {
-
+      // console.log(results);
+      // res.send(results);
     if(results !== undefined && results.length != 0) {
       // console.log(results);
       schools = results.map((school) => school.toJSON());
       console.log(schools);
-      res.render("search", {
-        schools: schools,
-        listExists: true,
-        active: { search: true },
-      });
+      res.json(schools)
+      // res.render("search", {
+      //   schools: schools,
+      //   listExists: true,
+      //   active: { search: true },
+      // });
     } else {
-      res.status(404).send(`No School found matching ${schoolName}`)
+      res.status(404).json(`No School found matching ${schoolName}`)
     }
     });
 });
@@ -112,9 +114,3 @@ app.listen(3000, function () {
 });
 
 
-// if(!schools) {
-//   console.log ('got results!')
-//   res.status(401).send('No Matching Schools Found');
-//   alert(`No Schools Found matching ${schoolName}`);
-//   return;
-// }
