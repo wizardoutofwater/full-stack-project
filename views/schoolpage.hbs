@@ -1,7 +1,7 @@
 <div class="cover-container content-wrapper d-flex w-100 h-100 p-3 mx-auto flex-column">
   {{> navbar}}
 
-<h2>{{highschool.name}}</h2>
+<h2 class="{{highschool.id}}">{{highschool.name}}</h2>
 <p>Welcome to your alumni page! <br>
     Use this to talk to each other about a reunion, reminisce or share funny stories.</p>
 
@@ -17,9 +17,15 @@
       </div>
     </div>
   </form>
+  <div id="schoolHeader">
+  {{highschool.id}}
+</div>
 <div id = "threadResults">
 
 </div>
 
   {{> footer}}
 </div>
+
+
+

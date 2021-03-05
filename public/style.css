@@ -202,6 +202,27 @@ body {
 .txt-yellow {
   color: #f5cb5c;
 }
+.txt-dark {
+  color:#242423;
+}
+
+/* Search Results */
+
+.card {
+  color:#242423;
+  background-color: #e8eddf;
+  border: 0.05rem solid #CFDBD5;
+  border-radius: .5em;
+}
+
+/* Error */
+.error-divider{
+  background-color:#CFDBD5;
+}
+.alert-oops{
+  border: 1px solid darkred;
+  border-radius: .5em;
+}
 
 /*
  * Footer
