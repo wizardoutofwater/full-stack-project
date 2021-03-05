@@ -68,12 +68,12 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/search", (req, res,) => {
+  console.log('req.user'+ req.user)
   if (req.session.user) {
     console.log(req.session.user);
     res.render("search", {active: { search: true }});
   } else res.status(404).send('user not logged in')
 
- 
 });
 
 // Sign-Up Routes
