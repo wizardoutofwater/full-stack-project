@@ -9,7 +9,7 @@ const { Op } = require("sequelize");
 
 
 app.use(session({
-  password: 'Windward',
+  secret: 'Windward',
   resave: true,
   saveUninitialized: true,
   cookie: { maxAge: 60 * 60 * 1000 } 
@@ -54,6 +54,9 @@ function encryptPassword(password, pass_salt) {
 
   return `$${salt}$${hash}`;
 }
+
+
+
 // ------TEST ROUTES (NEED TO BE INCORPORATED INTO FINAL ROUTES)------
 // Main Page Routes
 app.get("/", (req, res) => {
@@ -64,8 +67,13 @@ app.get("/login", (req, res) => {
   res.render("login", { active: { login: true } });
 });
 
-app.get("/search", (req, res) => {
-  res.render("search", { active: { search: true } });
+app.get("/search", (req, res,) => {
+  if (req.session.user) {
+    console.log(req.session.user);
+    res.render("search", {active: { search: true }});
+  } else res.status(404).send('user not logged in')
+
+ 
 });
 
 // Sign-Up Routes
@@ -137,7 +145,7 @@ app.get("/api/login",isAuthenticated, function (request, response, next) {
 });
 
 function isAuthenticated(req, res, next) {
-  if (req.user.authenticated){
+  if (req.session.user){
   next();  
   }
   res.redirect('/login');
@@ -177,6 +185,8 @@ app.listen(3000, function () {
 })
 
 app.post('/login', (req, res) => {
+  console.log(req.body.username, req.body.password); 
+
   if(req.body.username && req.body.password) {
     db.user.findOne(
       { 
@@ -194,7 +204,7 @@ app.post('/login', (req, res) => {
           // compared hashed password with user password
           if(encryptedPass == user.password) {
             req.session.user = user;
-            res.send('welcome user: ' + user.username);
+            res.redirect('/search');
           }else {
             res.send('wrong password')
           }
