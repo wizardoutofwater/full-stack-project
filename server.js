@@ -6,6 +6,7 @@ const pbkdf2 = require("pbkdf2");
 const session = require("express-session");
 const handlebars = require("express-handlebars");
 const { Op } = require("sequelize");
+const { read } = require("fs");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,6 +26,61 @@ app.engine(
 app.use(express.static("public"));
 
 // test route for HBS
+
+app.get("/school/test", (req,res) => {
+res.render("schoolpage")
+});
+
+app.get("/school/:id", (req, res) => {
+  db.highschool.findOne({where: {id: req.params.id}}).then((results) => {
+    // console.log(results)
+    school = results.dataValues;
+    res.render("schoolpage", {
+      highschool: school
+    })
+  })
+})
+
+
+
+app.get("/school/:id/thread/:id", (req, res) => {
+  db.thread.findOne({where: {id: req.params.id}}).then((results) => {
+  // console.log(results)
+  thread = results.dataValues
+  res.render = ("schoolpage", {
+    thread: thread
+    })
+  })
+})
+
+app.get("/school/:id/thread", (req, res) => {
+  db.thread.findAll({where: {highschool_id: req.params.id}}).then((results) => {
+    // console.log(results)
+    results.map((threads) => {
+      console.log(threads)
+      res.json(threads)
+    })
+  // return threads
+  // }).then((threads) => {
+  //     res.render = ("schoolpage", {
+  //       thread: threads
+  //     })
+    }) 
+    // res.redirect(`/school/${highschool.id}`)
+  })
+// })
+
+//^^res.rediirect back to school:id page?
+
+app.post("/school/:id/thread/new", (req, res) => {
+  db.thread.findAll().then((results) => {
+    newThread = results.push({title: req.body.title, content: req.body.content})
+    res.json(newThread)
+  })
+})
+//^^res.redirect back to thread page?
+
+//test route closed
 
 app.get("/", (req, res) => {
   res.render("home", { active: { home: true } });
