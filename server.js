@@ -138,7 +138,7 @@ app.get("/api/search/:name", isAuthenticated, (req, res) => {
 
 
 // GET All schools
-app.get("/api/school", isAuthenticated, function (request, response, next) {
+app.get("/api/school/all", isAuthenticated, function (request, response, next) {
   db.highschool.findAll().then((results) => {
     res.send(results);
   });

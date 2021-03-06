@@ -1,0 +1,58 @@
+<div class="cover-container content-wrapper d-flex w-100 h-100 p-3 mx-auto flex-column">
+    {{> navbar user=user}}
+    <h1>Thanks for Signing Up!</h1>
+    <h2>Just a few more things to complete your profile...</h2>
+    <div class="loginForm p-3 shadow-6">
+        <form action="./create-profile" method="POST" class="form-createName">
+            <h1 class="display-4 mb-3 lead">Sign Up!</h1>
+            <p>Enter your e-mail and choose a password to create your account</p>
+            <label for="signupEmail" class="sr-only">Email address</label>
+            <input type="email" name="username" id="username" class="form-control form-control-underlined mb-3"
+                placeholder="Email address" required autofocus>
+            <label for="signupPassword" class="sr-only">Password</label>
+            <input type="password" name="password" id="password" class="form-control form-control-underlined mb-3"
+                placeholder="Password" required>
+            <small id="passwordHelpBlock" class="form-text text-muted">
+                Your password must be 8-20 characters long.
+            </small>
+            <button class="btn btn-lg btn-primary rounded-pill shadow-sm float-right float-md-none mt-3"
+                type="submit">Sign Up!</button>
+
+                <label for="dropdown">Choose a school:</label>
+    <select id="dropdown">
+
+    </select> 
+
+        </form>
+    </div>
+
+
+    {{> footer}}
+</div>
+<script>
+    $(document).ready(function () {
+        console.log('create-profile ready!');
+        generateList();
+        let $dropDown = $('#dropdown')
+        let $schoolName = '';
+
+        $dropDown.change(function () {
+            $schoolName = this.val();
+            console.log($schoolName);
+        })
+
+        $.get('api/schools/all').done(
+            function(response) {
+                let schoolList = response.data.message;
+                function iterate(item, index){
+                $dropDown.html() += `<option value ="${item}"> ${item} </option>`
+                }
+                schoolList.forEach(iterate);
+            })
+   
+           .fail(function (){
+
+           }) 
+    })
+
+</script>
