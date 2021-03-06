@@ -55,41 +55,22 @@ function encryptPassword(password, pass_salt) {
 
   return `$${salt}$${hash}`;
 }
-
-app.get("/school/test", (req,res) => {
-res.render("schoolpage")
-});
-
+//tristyns routes open
 app.get("/school/:id", (req, res) => {
   db.highschool.findOne({where: {id: req.params.id}}).then((results) => {
-    // console.log(results)
-    school = results.dataValues}).then(() => {
-      db.thread.findAll({where: {highschool_id: req.params.id}}).then((results) => {
-        // console.log(results)
-        results.map((threads) => {
-          console.log(threads)
-          res.json(threads)
-        })
-      }) 
-    })
-    res.render("schoolpage", {
-      highschool: school
-
-    })
+    let school = results.dataValues;
+    let schoolID = school.id
+    console.log(schoolID)
+    db.thread.findAll({where: {highschool_id: schoolID}}).then((results) => {
+      let threads = results.map((thread) => thread.toJSON());
+      console.log(threads)
+      res.render("schoolpage", {
+        highschool: school,
+        thread: threads
+      })
+    });
   })
 })
-
-// app.get("/school/:id", (req, res) => {
-//   db.highschool.findOne({where: {id: req.params.id}}).then((results) => {
-//     // console.log(results)
-//     school = results.dataValues
-//     res.render("schoolpage", {
-//       highschool: school
-//     })
-//   })
-// })
-
-
 
 
 app.get("/school/:id/thread/:id", (req, res) => {
@@ -121,15 +102,14 @@ app.get("/school/:id/thread", (req, res) => {
 
 
 
-app.post("/school/:id/thread/new", (req, res) => {
-  db.thread.findAll().then((results) => {
-    newThread = results.push({title: req.body.title, content: req.body.content})
-    res.json(newThread)
+app.post("/school/:id/thread", (req, res) => {
+  db.thread.create({highschool_id: req.params.id, title: req.body.title, 
+    content: req.body.content, user_id: req.body.user_id})
+  .then(() => {
+    res.redirect(`/school/${req.params.id}`)
   })
 })
-//^^res.redirect back to thread page?
-
-//test route closed
+//tristyns route closed
 
 
 
