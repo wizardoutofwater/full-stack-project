@@ -14,6 +14,14 @@ a:hover {
   color: #e8eddf;
 }
 
+.deleteLink {
+  color:#242423;
+}
+
+.deleteLink:hover {
+  color: red;
+}
+
 /* Custom default button */
 .btn-primary,
 .btn-primary:focus {
@@ -213,6 +221,10 @@ body {
   background-color: #e8eddf;
   border: 0.05rem solid #CFDBD5;
   border-radius: .5em;
+}
+
+.deleteLink {
+  color:#242423;
 }
 
 /* Error */

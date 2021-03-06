@@ -83,16 +83,16 @@ app.get("/school/:id", (req, res) => {
 })
 
 
-app.get("/school/:id/thread/:id", (req, res) => {
-  db.thread.findOne({where: {id: req.params.id}}).then((results) => {
-  // console.log(results)
-  thread = results.dataValues
-  res.render = ("schoolpage", {
-    user: req.session.user,
-    thread: thread
-    })
-  })
-})
+// app.get("/school/:id/thread/:id", (req, res) => {
+//   db.thread.findOne({where: {id: req.params.id}}).then((results) => {
+//   // console.log(results)
+//   thread = results.dataValues
+//   res.render = ("schoolpage", {
+//     user: req.session.user,
+//     thread: thread
+//     })
+//   })
+// })
 
 app.get("/school/:id/thread", (req, res) => {
   db.thread.findAll({where: {highschool_id: req.params.id}}).then((results) => {
@@ -119,6 +119,27 @@ app.post("/school/:id/thread", (req, res) => {
   .then(() => {
     res.redirect(`/school/${req.params.id}`)
   })
+})
+
+// app.get("/school/:id/thread/:thread", (req, res) => {
+//   console.log(req.params)
+//   db.thread.findOne(
+//     {where: {highschool_id: req.params.id, id: req.params.thread}})
+//     .then((results) => {
+//       console.log(results)
+//       res.send(results)
+//     })
+// })
+
+app.get("/school/:id/thread/:thread", (req, res) => {
+  console.log(req.params)
+  db.thread.findOne(
+    {where: {highschool_id: req.params.id, id: req.params.thread}})
+    .then((results) => {
+      results.destroy();
+      // res.send(results)
+      res.redirect(`/school/${req.params.id}`)
+    })
 })
 //tristyns route closed
 
