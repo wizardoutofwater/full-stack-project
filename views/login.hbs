@@ -1,17 +1,15 @@
   <div class="cover-container content-wrapper d-flex w-100 h-100 p-3 mx-auto flex-column">
-    {{> navbar}}
+
+    {{> navbar user=user}}
+
   <div class="loginForm p-3 shadow-6">
-    <form class="form-signin">
+    <form action="./login" method="POST" class="form-signin">
   <h1 class="display-4 mb-3 lead">Please sign in</h1>
   <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" id="inputEmail" class="form-control form-control-underlined mb-3" placeholder="Email address" required autofocus>
+  <input type="email" name="username" id="inputEmail" class="form-control form-control-underlined mb-3" placeholder="Email address" required autofocus>
   <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" id="inputPassword" class="form-control form-control-underlined mb-3" placeholder="Password" required>
-  {{!-- <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
-  </div> --}}
+  <input type="password" name="password" id="inputPassword" class="form-control form-control-underlined mb-3" placeholder="Password" required>
+
   <button class="btn btn-lg btn-primary rounded-pill shadow-sm float-right float-md-none" type="submit">Login</button>
   <p class="mt-5 mb-3 text-muted">New Here? <a href="/sign-up">Sign Up!</a></p>
 </form>

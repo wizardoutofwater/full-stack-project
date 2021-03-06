@@ -3,8 +3,12 @@
         <h3 class="masthead-brand brand">re:union</h3>
         <nav class="nav nav-masthead justify-content-center">
           <a class="nav-link {{#if active.home}}active{{/if}} home" href="/">Home</a>
+         {{#if user}}
           <a class="nav-link {{#if active.search}}active{{/if}} search" href="/search">Search</a>
+          <a class="nav-link {{#if active.login}}active{{/if}} login" href="/logout">Logout</a>
+          {{else}}
           <a class="nav-link {{#if active.login}}active{{/if}} login" href="/login">Login</a>
+          {{/if}}
         </nav>
       </div>
     </header>

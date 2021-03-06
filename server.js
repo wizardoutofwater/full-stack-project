@@ -7,21 +7,20 @@ const session = require("express-session");
 const handlebars = require("express-handlebars");
 const { Op } = require("sequelize");
 
-
-app.use(session({
-  password: 'Windward',
-  resave: true,
-  saveUninitialized: true,
-  cookie: { maxAge: 60 * 60 * 1000 } 
-}))
+app.use(
+  session({
+    secret: "Windward",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 },
+  })
+);
 
 function encryptPassword(password, pass_salt) {
-  var salt = pass_salt ? pass_salt : crypto.randomBytes(20).toString('hex');
-  var key = pbkdf2.pbkdf2Sync(
-    password, salt, 36000, 256, 'sha256'
-  );
+  var salt = pass_salt ? pass_salt : crypto.randomBytes(20).toString("hex");
+  var key = pbkdf2.pbkdf2Sync(password, salt, 36000, 256, "sha256");
 
-  var hash = key.toString('hex');
+  var hash = key.toString("hex");
 
   return `$${salt}$${hash}`;
 }
@@ -43,56 +42,72 @@ app.engine(
 // Serve Static css/image files
 app.use(express.static("public"));
 
-// Encryption 
+// Encryption
 function encryptPassword(password, pass_salt) {
-  var salt = pass_salt ? pass_salt : crypto.randomBytes(20).toString('hex');
-  var key = pbkdf2.pbkdf2Sync(
-    password, salt, 36000, 256, 'sha256'
-  );
+  var salt = pass_salt ? pass_salt : crypto.randomBytes(20).toString("hex");
+  var key = pbkdf2.pbkdf2Sync(password, salt, 36000, 256, "sha256");
 
-  var hash = key.toString('hex');
+  var hash = key.toString("hex");
 
   return `$${salt}$${hash}`;
 }
+
+function isAuthenticated(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else res.redirect("/login");
+}
+
 // ------TEST ROUTES (NEED TO BE INCORPORATED INTO FINAL ROUTES)------
 // Main Page Routes
 app.get("/", (req, res) => {
-  res.render("home", { active: { home: true } });
+  res.render("home", {
+    user: req.session.user,
+    active: { home: true },
+  });
 });
 
 app.get("/login", (req, res) => {
-  res.render("login", { active: { login: true } });
+  res.render("login", {
+    user: req.session.user,
+    active: { login: true },
+  });
 });
 
-app.get("/search", (req, res) => {
-  res.render("search", { active: { search: true } });
+app.get("/search", isAuthenticated, (req, res) => {
+  res.render("search", {
+    user: req.session.user,
+    active: { search: true },
+  });
 });
 
 // Sign-Up Routes
 
 app.get("/sign-up", (req, res) => {
-  res.render ("sign-up");
+  if (req.session.user) {
+    res.redirect("/");
+  } else res.render("sign-up");
 });
 
-app.post('/sign-up', (req, res) => {
-  console.log(req.body);
-  if(req.body.username && req.body.password) {
-    db.user.create(
-      {
-        username: req.body.username, 
-        password: encryptPassword(req.body.password)
-      }
-      ).then((user) => {
-      res.redirect("/login");
-    })
+app.post("/sign-up", (req, res) => {
+  // console.log(req.body);
+  if (req.body.username && req.body.password) {
+    db.user
+      .create({
+        username: req.body.username,
+        password: encryptPassword(req.body.password),
+      })
+      .then((user) => {
+        res.redirect("/login");
+      });
   } else {
-    res.send(' please send username and password.');
+    res.send(" please send username and password.");
   }
-})
+});
 
 // Search Route
 
-app.get("/api/search/:name", (req, res) => {
+app.get("/api/search/:name", isAuthenticated, (req, res) => {
   let schoolName = req.params.name;
   db.highschool
     .findAll({
@@ -103,127 +118,90 @@ app.get("/api/search/:name", (req, res) => {
       },
     })
     .then((results) => {
-    if(results !== undefined && results.length != 0) {
-      // console.log(results);
-      schools = results.map((school) => school.toJSON());
-      console.log(schools);
-      res.json(schools)
-      // res.render("search", {
-      //   schools: schools,
-      //   listExists: true,
-      //   active: { search: true },
-      // });
-    } else {
-      res.status(404).json(`No School found matching ${schoolName}`)
-    }
+      if (results !== undefined && results.length != 0) {
+        // console.log(results);
+        schools = results.map((school) => school.toJSON());
+        console.log(schools);
+        res.json(schools);
+        // res.render("search", {
+        //   schools: schools,
+        //   listExists: true,
+        //   active: { search: true },
+        // });
+      } else {
+        res.status(404).json(`No School found matching ${schoolName}`);
+      }
     });
 });
 
-
 // -----Routes-----
-app.get("/api",isAuthenticated, function (request, response, next) {
-  console.log("someone sent a request home");
-  response.send();
-});
 
-app.get("/api/search",isAuthenticated, function (request, response, next) {
-  console.log("someone sent a request home");
-  response.send();
-});
-
-app.get("/api/login",isAuthenticated, function (request, response, next) {
-  console.log("someone sent a request home");
-  response.send();
-});
-
-function isAuthenticated(req, res, next) {
-  if (req.user.authenticated){
-  next();  
-  }
-  res.redirect('/login');
-}
 
 // GET All schools
-app.get("/api/school",isAuthenticated, function (request, response, next) {
+app.get("/api/school", isAuthenticated, function (request, response, next) {
   db.highschool.findAll().then((results) => {
     res.send(results);
   });
   response.send();
 });
-app.get("/api/school/:id",isAuthenticated, function (request, response, next) {
-  console.log("someone sent a request home");
-  response.send();
-});
+// app.get("/api/school/:id", isAuthenticated, function (request, response, next) {
+//   console.log("someone sent a request home");
+//   response.send();
+// });
 
-app.post("/api/alumni",isAuthenticated, function (request, response, next) {
-  console.log("someone sent a request home");
-  response.send();
-});
+// app.post("/api/alumni", isAuthenticated, function (request, response, next) {
+//   console.log("someone sent a request home");
+//   response.send();
+// });
 
-app.post("/api/school",isAuthenticated, function (request, response, next) {
-  console.log("someone sent a request home");
-  response.send();
-});
+// app.post("/api/alumni/:id", isAuthenticated, function (request, response, next) {
+//   console.log("someone sent a request home");
+//   response.send();
+// });
 
-app.listen(3000, function () {
-  console.log("listening in port 3000");
-});
 
-//sign in and out
-
- app.get('/logout', (req, res) => {
+// Login Routes
+app.get("/logout", (req, res) => {
   req.session.destroy();
-  res.send('successful logout');
-})
+  res.redirect("/");
+});
 
-app.post('/login', (req, res) => {
-  if(req.body.username && req.body.password) {
-    db.user.findOne(
-      { 
-        where: 
-        { 
-          username: req.body.username
-        } 
-      }).then((user) => {
-        if(user) {
-          var pass_parts = user.password.split('$');
+app.post("/login", (req, res) => {
+  console.log(req.body.username, req.body.password);
+
+  if (req.body.username && req.body.password) {
+    db.user
+      .findOne({
+        where: {
+          username: req.body.username,
+        },
+      })
+      .then((user) => {
+        if (user) {
+          var pass_parts = user.password.split("$");
 
           // encrypt req.body.password using pass_parts[1]
           let encryptedPass = encryptPassword(req.body.password, pass_parts[1]);
 
           // compared hashed password with user password
-          if(encryptedPass == user.password) {
+          if (encryptedPass == user.password) {
             req.session.user = user;
-            res.send('welcome user: ' + user.username);
-          }else {
-            res.send('wrong password')
+            res.redirect("/search");
+          } else {
+            res.send("wrong password");
           }
-
         } else {
-          res.send('we could not find any users')
+          res.send("we could not find any users");
         }
-      }).catch(() => {
-        res.send('There was an error');
+      })
+      .catch(() => {
+        res.status(401).send("There was an error");
       });
   } else {
-    res.send('please send a username and password')
+    res.send("please send a username and password");
   }
 });
 
-
-app.post('/sign-up', (req, res) => {
-  if(req.body.username && req.body.password) {
-    db.user.create(
-      {
-        username: req.body.username, 
-        password: encryptPassword(req.body.password)
-      }
-      ).then((user) => {
-      res.send(user)
-    })
-  } else {
-    res.send(' please send username and password.');
-  }
-})
-
-
+app.listen(3000, function () {
+  console.log("listening in port 3000");
+});
