@@ -1,0 +1,51 @@
+<div class="cover-container content-wrapper d-flex w-100 h-100 p-3 mx-auto flex-column">
+  {{> navbar}}
+
+<h2 class="{{highschool.id}}">{{highschool.name}}</h2>
+<p>Welcome to your alumni page! <br>
+    Use this to talk to each other about a reunion, reminisce or share funny stories.</p>
+
+  <form action="/school/{{highschool.id}}/thread" method="POST" id="threadForm">
+    <div class="row mb-4">
+      <div class="form-group col-md-9">
+        <input id="title-input" name="title" type="text" placeholder="Title your post!"
+          class="form-control form-control-underlined">
+          <input id="thread-input" name="content" type="text" placeholder="Share your memories here!"
+          class="form-control form-control-underlined">
+      </div>
+      <div class="form-group col-md-3">
+        <button type="submit" id="threadsubmitButton"
+          class="align-items-bottom btn btn-primary rounded-pill btn-block shadow-sm float-right float-md-none">Submit</button>
+      </div>
+    </div>
+  </form>
+
+<div id = "threadResults">
+{{#each thread}}
+
+     <div class="card mb-4 shadow-6" id="{{highschool.name}}" >  
+        <div class="card-body">
+            <div class="lead text-center">{{this.title}}</div>
+                  <div class="text-center">
+                      {{this.content}}
+                  </div>  
+                  <a href="/school/{{highschool.id}}/thread">Add Comment</a>
+            </div>
+        </div>
+
+      {{/each}}
+</div>
+
+
+<div>
+  {{> footer}}
+</div>
+
+  {{!-- {{#each thread}}
+  <h4>{{this.title}}</h4>
+  <p>{{this.content}}</p>
+  <a href="#">Add Comment</a>
+  {{/each}} --}}
+
+
+
