@@ -17,14 +17,14 @@ module.exports = {
     }
 
     
-      await queryInterface.bulkInsert('HighSchools', data , 
+      await queryInterface.bulkInsert('highschools', data , 
       {});
 
   },
 
   down: async (queryInterface, Sequelize) => {
     
-      await queryInterface.bulkDelete('HighSchools', data, {});
+      await queryInterface.bulkDelete('highschools', data, {});
      
   }
 };
