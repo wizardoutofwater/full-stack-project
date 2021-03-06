@@ -1,24 +1,26 @@
 <div class="cover-container content-wrapper d-flex w-100 h-100 p-3 mx-auto flex-column">
-  {{> navbar}}
+  {{> navbar user=user}}
 
 <h2 class="{{highschool.id}}">{{highschool.name}}</h2>
 <p>Welcome to your alumni page! <br>
     Use this to talk to each other about a reunion, reminisce or share funny stories.</p>
 
+<div class ="loginForm p-3 shadow-6 mb-3">
   <form action="/school/{{highschool.id}}/thread" method="POST" id="threadForm">
-    <div class="row mb-4">
-      <div class="form-group col-md-9">
+ 
+     
         <input id="title-input" name="title" type="text" placeholder="Title your post!"
           class="form-control form-control-underlined">
           <input id="thread-input" name="content" type="text" placeholder="Share your memories here!"
           class="form-control form-control-underlined">
-      </div>
-      <div class="form-group col-md-3">
+           <input type="hidden" id="user_id-input" name="user_id" value="{{user.id}}">
+   
         <button type="submit" id="threadsubmitButton"
-          class="align-items-bottom btn btn-primary rounded-pill btn-block shadow-sm float-right float-md-none">Submit</button>
-      </div>
-    </div>
+          class="btn btn-lg btn-primary rounded-pill shadow-sm float-right float-md-none mt-3">Submit</button>
+     
   </form>
+  </div>
+
 
 <div id = "threadResults">
 {{#each thread}}
@@ -37,9 +39,10 @@
 </div>
 
 
-<div>
+
   {{> footer}}
 </div>
+
 
   {{!-- {{#each thread}}
   <h4>{{this.title}}</h4>

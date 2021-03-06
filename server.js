@@ -72,7 +72,9 @@ app.get("/school/:id", (req, res) => {
     db.thread.findAll({where: {highschool_id: schoolID}}).then((results) => {
       let threads = results.map((thread) => thread.toJSON());
       console.log(threads)
+      console.log(req.session.user);
       res.render("schoolpage", {
+        user: req.session.user,
         highschool: school,
         thread: threads
       })
@@ -86,7 +88,7 @@ app.get("/school/:id/thread/:id", (req, res) => {
   // console.log(results)
   thread = results.dataValues
   res.render = ("schoolpage", {
-    user: req.session.user
+    user: req.session.user,
     thread: thread
     })
   })
