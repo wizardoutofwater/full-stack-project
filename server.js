@@ -6,7 +6,6 @@ const pbkdf2 = require("pbkdf2");
 const session = require("express-session");
 const handlebars = require("express-handlebars");
 const { Op } = require("sequelize");
-const { read } = require("fs");
 
 
 app.use(
@@ -141,6 +140,31 @@ app.get("/school/:id/thread/:thread", (req, res) => {
       res.redirect(`/school/${req.params.id}`)
     })
 })
+
+//update password
+
+app.post("/update-password", isAuthenticated, (req, res) => {
+  // console.log(req.body);
+    db.user
+      .update({password: encryptPassword(req.body.password)}, {
+        where: {
+        id: req.body.user_id
+      }
+    })
+      .then((user) => {
+        res.redirect("/login");
+      });
+});
+    // res.send("please try again.");
+
+app.get("/update-password", (req, res) => {
+  res.render("updatepassword", {
+    user: req.session.user,
+    active: { search: true }
+  });
+});
+
+
 //tristyns route closed
 
 
