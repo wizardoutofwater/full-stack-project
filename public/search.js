@@ -31,7 +31,7 @@ $(document).ready(function () {
        
                               `<div class="card school-card mb-4 shadow-6" id="${school.name}" >  
                                   <div class="card-body">
-                                        <div class="lead text-center"><a class="txt-dark " href="./schools/${school.id}">${school.name}</a></div>
+                                        <div class="lead text-center"><a class="txt-dark " href="./school/${school.id}">${school.name}</a></div>
                                             <div class="text-center">
                                             ${school.city}, ${school.state}
                                             </div>  

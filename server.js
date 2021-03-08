@@ -6,6 +6,8 @@ const pbkdf2 = require("pbkdf2");
 const session = require("express-session");
 const handlebars = require("express-handlebars");
 const { Op } = require("sequelize");
+const { read } = require("fs");
+
 
 app.use(
   session({
@@ -15,6 +17,7 @@ app.use(
     cookie: { maxAge: 60 * 60 * 1000 },
   })
 );
+
 
 function encryptPassword(password, pass_salt) {
   var salt = pass_salt ? pass_salt : crypto.randomBytes(20).toString("hex");
@@ -57,6 +60,90 @@ function isAuthenticated(req, res, next) {
     next();
   } else res.redirect("/login");
 }
+
+
+
+//tristyns routes open
+app.get("/school/:id", (req, res) => {
+  db.highschool.findOne({where: {id: req.params.id}}).then((results) => {
+    let school = results.dataValues;
+    let schoolID = school.id
+    console.log(schoolID)
+    db.thread.findAll({where: {highschool_id: schoolID}}).then((results) => {
+      let threads = results.map((thread) => thread.toJSON());
+      console.log(threads)
+      console.log(req.session.user);
+      res.render("schoolpage", {
+        user: req.session.user,
+        highschool: school,
+        thread: threads
+      })
+    });
+  })
+})
+
+
+// app.get("/school/:id/thread/:id", (req, res) => {
+//   db.thread.findOne({where: {id: req.params.id}}).then((results) => {
+//   // console.log(results)
+//   thread = results.dataValues
+//   res.render = ("schoolpage", {
+//     user: req.session.user,
+//     thread: thread
+//     })
+//   })
+// })
+
+app.get("/school/:id/thread", (req, res) => {
+  db.thread.findAll({where: {highschool_id: req.params.id}}).then((results) => {
+    // console.log(results)
+    results.map((threads) => {
+      console.log(threads)
+      res.json(threads)
+    })
+  // return threads
+  // }).then((threads) => {
+  //     res.render = ("schoolpage", {
+  //       thread: threads
+  //     })
+    }) 
+    // res.redirect(`/school/${highschool.id}`)
+  })
+// })
+
+
+
+app.post("/school/:id/thread", (req, res) => {
+  db.thread.create({highschool_id: req.params.id, title: req.body.title, 
+    content: req.body.content, user_id: req.body.user_id})
+  .then(() => {
+    res.redirect(`/school/${req.params.id}`)
+  })
+})
+
+// app.get("/school/:id/thread/:thread", (req, res) => {
+//   console.log(req.params)
+//   db.thread.findOne(
+//     {where: {highschool_id: req.params.id, id: req.params.thread}})
+//     .then((results) => {
+//       console.log(results)
+//       res.send(results)
+//     })
+// })
+
+app.get("/school/:id/thread/:thread", (req, res) => {
+  console.log(req.params)
+  db.thread.findOne(
+    {where: {highschool_id: req.params.id, id: req.params.thread}})
+    .then((results) => {
+      results.destroy();
+      // res.send(results)
+      res.redirect(`/school/${req.params.id}`)
+    })
+})
+//tristyns route closed
+
+
 
 // ------TEST ROUTES (NEED TO BE INCORPORATED INTO FINAL ROUTES)------
 // Main Page Routes
@@ -209,6 +296,6 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
   console.log("listening in port 3000");
 });
