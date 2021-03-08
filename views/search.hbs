@@ -25,3 +25,11 @@
   {{> footer}}
 </div>
 
+<script>
+  $(document).ready(function () {
+  if ( ! localStorage.getItem(window.location) ) {
+    localStorage.setItem(window.location, true);
+    alert('Welcome');
+}
+  });
+</script>
