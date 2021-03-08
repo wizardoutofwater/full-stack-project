@@ -6,7 +6,6 @@ const pbkdf2 = require("pbkdf2");
 const session = require("express-session");
 const handlebars = require("express-handlebars");
 const { Op } = require("sequelize");
-const { read } = require("fs");
 
 
 app.use(
