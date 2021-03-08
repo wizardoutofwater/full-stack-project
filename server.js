@@ -230,6 +230,23 @@ app.get("/sign-up/complete", (req, res) => {
   });
 });
 
+// user profile page
+app.get("/profile/:id", (req, res) => {
+  db.alumni.findOrCreate({
+    where: {user_id: req.params.id},
+    defaults:{
+      highschool_id: '1'
+    }
+  }).then((results) =>{
+    console.log(results);
+    alumni = results.map((alum) => alum.toJSON())
+  res.render("profile", {
+    alumni: alumni,
+    user: req.session.user,
+    active: { login: true },
+  });
+});
+});
 // GET All schools
 app.get("/api/school/all", (req, res) => {
   db.highschool.findAll().then((results) => {
