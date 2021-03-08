@@ -141,6 +141,30 @@ app.get("/school/:id/thread/:thread", (req, res) => {
       res.redirect(`/school/${req.params.id}`)
     })
 })
+
+//update password
+
+app.post("/update-password", isAuthenticated, (req, res) => {
+  // console.log(req.body);
+    db.user
+      .update({password: encryptPassword(req.body.password)}, {
+        where: {
+        username: req.body.username
+      }
+    })
+      .then((user) => {
+        res.redirect("/login");
+      });
+});
+    // res.send("please try again.");
+
+app.get("/update-password", (req, res) => {
+  res.render("updatepassword", {
+
+  })
+})
+
+
 //tristyns route closed
 
 
