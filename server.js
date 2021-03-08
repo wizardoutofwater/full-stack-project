@@ -149,7 +149,7 @@ app.post("/update-password", isAuthenticated, (req, res) => {
     db.user
       .update({password: encryptPassword(req.body.password)}, {
         where: {
-        username: req.body.username
+        id: req.body.user_id
       }
     })
       .then((user) => {
@@ -160,9 +160,10 @@ app.post("/update-password", isAuthenticated, (req, res) => {
 
 app.get("/update-password", (req, res) => {
   res.render("updatepassword", {
-
-  })
-})
+    user: req.session.user,
+    active: { search: true }
+  });
+});
 
 
 //tristyns route closed
