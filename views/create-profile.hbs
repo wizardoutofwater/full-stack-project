@@ -18,10 +18,16 @@
             <button class="btn btn-lg btn-primary rounded-pill shadow-sm float-right float-md-none mt-3"
                 type="submit">Sign Up!</button>
 
-                <label for="dropdown">Choose a school:</label>
-    <select id="dropdown">
+            <label for="school-dropdown">Choose a school:</label>
+            <select id="school-dropdown">
 
-    </select> 
+            </select>
+
+            <label for="year-dropdown">Choose Your Graduation Year:</label>
+            <select id="year-dropdown">
+
+            </select>
+
 
         </form>
     </div>
@@ -29,30 +35,4 @@
 
     {{> footer}}
 </div>
-<script>
-    $(document).ready(function () {
-        console.log('create-profile ready!');
-        generateList();
-        let $dropDown = $('#dropdown')
-        let $schoolName = '';
-
-        $dropDown.change(function () {
-            $schoolName = this.val();
-            console.log($schoolName);
-        })
-
-        $.get('api/schools/all').done(
-            function(response) {
-                let schoolList = response.data.message;
-                function iterate(item, index){
-                $dropDown.html() += `<option value ="${item}"> ${item} </option>`
-                }
-                schoolList.forEach(iterate);
-            })
-   
-           .fail(function (){
-
-           }) 
-    })
-
-</script>
+<script src="../complete-profile.js"></script>

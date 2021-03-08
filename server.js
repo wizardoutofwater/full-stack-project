@@ -135,14 +135,21 @@ app.get("/api/search/:name", isAuthenticated, (req, res) => {
 });
 
 // -----Routes-----
-
+// complete profile routes
+app.get("/sign-up/complete", (req, res) => {
+  res.render("create-profile", {
+    user: req.session.user,
+    active: { login: true },
+  });
+});
 
 // GET All schools
-app.get("/api/school/all", isAuthenticated, function (request, response, next) {
+app.get("/api/school/all", (req, res) => {
   db.highschool.findAll().then((results) => {
-    res.send(results);
+    schools = results.map((school) => school.toJSON());
+    res.json(schools);
   });
-  response.send();
+
 });
 // app.get("/api/school/:id", isAuthenticated, function (request, response, next) {
 //   console.log("someone sent a request home");
