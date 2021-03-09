@@ -51,7 +51,7 @@ function isAuthenticated(req, res, next) {
 
 // ------ ROUTES --------
 
-app.get("/school/:id", (req, res) => {
+app.get("/school/:id", isAuthenticated, (req, res) => {
   db.highschool.findOne({ where: { id: req.params.id } }).then((results) => {
     let school = results.dataValues;
     let schoolID = school.id;
@@ -71,7 +71,7 @@ app.get("/school/:id", (req, res) => {
   });
 });
 
-app.post("/school/:id/thread", (req, res) => {
+app.post("/school/:id/thread", isAuthenticated, (req, res) => {
   db.thread
     .create({
       highschool_id: req.params.id,
@@ -84,7 +84,7 @@ app.post("/school/:id/thread", (req, res) => {
     });
 });
 
-app.get("/school/:id/thread/:thread", (req, res) => {
+app.get("/school/:id/thread/:thread", isAuthenticated, (req, res) => {
   console.log(req.params);
   db.thread
     .findOne({ where: { highschool_id: req.params.id, id: req.params.thread } })
@@ -112,7 +112,7 @@ app.post("/update-password", isAuthenticated, (req, res) => {
     });
 });
 
-app.get("/update-password", (req, res) => {
+app.get("/update-password", isAuthenticated, (req, res) => {
   res.render("updatepassword", {
     user: req.session.user,
     active: { search: true },
