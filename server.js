@@ -7,7 +7,6 @@ const session = require("express-session");
 const handlebars = require("express-handlebars");
 const { Op } = require("sequelize");
 
-
 app.use(
   session({
     secret: "Windward",
@@ -16,16 +15,6 @@ app.use(
     cookie: { maxAge: 60 * 60 * 1000 },
   })
 );
-
-
-function encryptPassword(password, pass_salt) {
-  var salt = pass_salt ? pass_salt : crypto.randomBytes(20).toString("hex");
-  var key = pbkdf2.pbkdf2Sync(password, salt, 36000, 256, "sha256");
-
-  var hash = key.toString("hex");
-
-  return `$${salt}$${hash}`;
-}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -60,116 +49,76 @@ function isAuthenticated(req, res, next) {
   } else res.redirect("/login");
 }
 
+// ------ ROUTES --------
 
-
-//tristyns routes open
-app.get("/school/:id", (req, res) => {
-  db.highschool.findOne({where: {id: req.params.id}}).then((results) => {
+app.get("/school/:id", isAuthenticated, (req, res) => {
+  db.highschool.findOne({ where: { id: req.params.id } }).then((results) => {
     let school = results.dataValues;
-    let schoolID = school.id
-    console.log(schoolID)
-    db.thread.findAll({where: {highschool_id: schoolID}}).then((results) => {
-      let threads = results.map((thread) => thread.toJSON());
-      console.log(threads)
-      console.log(req.session.user);
-      res.render("schoolpage", {
-        user: req.session.user,
-        highschool: school,
-        thread: threads
-      })
-    });
-  })
-})
-
-
-// app.get("/school/:id/thread/:id", (req, res) => {
-//   db.thread.findOne({where: {id: req.params.id}}).then((results) => {
-//   // console.log(results)
-//   thread = results.dataValues
-//   res.render = ("schoolpage", {
-//     user: req.session.user,
-//     thread: thread
-//     })
-//   })
-// })
-
-app.get("/school/:id/thread", (req, res) => {
-  db.thread.findAll({where: {highschool_id: req.params.id}}).then((results) => {
-    // console.log(results)
-    results.map((threads) => {
-      console.log(threads)
-      res.json(threads)
-    })
-  // return threads
-  // }).then((threads) => {
-  //     res.render = ("schoolpage", {
-  //       thread: threads
-  //     })
-    }) 
-    // res.redirect(`/school/${highschool.id}`)
-  })
-// })
-
-
-
-app.post("/school/:id/thread", (req, res) => {
-  db.thread.create({highschool_id: req.params.id, title: req.body.title, 
-    content: req.body.content, user_id: req.body.user_id})
-  .then(() => {
-    res.redirect(`/school/${req.params.id}`)
-  })
-})
-
-// app.get("/school/:id/thread/:thread", (req, res) => {
-//   console.log(req.params)
-//   db.thread.findOne(
-//     {where: {highschool_id: req.params.id, id: req.params.thread}})
-//     .then((results) => {
-//       console.log(results)
-//       res.send(results)
-//     })
-// })
-
-app.get("/school/:id/thread/:thread", (req, res) => {
-  console.log(req.params)
-  db.thread.findOne(
-    {where: {highschool_id: req.params.id, id: req.params.thread}})
-    .then((results) => {
-      results.destroy();
-      // res.send(results)
-      res.redirect(`/school/${req.params.id}`)
-    })
-})
-
-//update password
-
-app.post("/update-password", isAuthenticated, (req, res) => {
-  // console.log(req.body);
-    db.user
-      .update({password: encryptPassword(req.body.password)}, {
-        where: {
-        id: req.body.user_id
-      }
-    })
-      .then((user) => {
-        res.redirect("/login");
+    let schoolID = school.id;
+    console.log(schoolID);
+    db.thread
+      .findAll({ where: { highschool_id: schoolID } })
+      .then((results) => {
+        let threads = results.map((thread) => thread.toJSON());
+        console.log(threads);
+        console.log(req.session.user);
+        res.render("schoolpage", {
+          user: req.session.user,
+          highschool: school,
+          thread: threads,
+        });
       });
-});
-    // res.send("please try again.");
-
-app.get("/update-password", (req, res) => {
-  res.render("updatepassword", {
-    user: req.session.user,
-    active: { search: true }
   });
 });
 
+app.post("/school/:id/thread", isAuthenticated, (req, res) => {
+  db.thread
+    .create({
+      highschool_id: req.params.id,
+      title: req.body.title,
+      content: req.body.content,
+      user_id: req.body.user_id,
+    })
+    .then(() => {
+      res.redirect(`/school/${req.params.id}`);
+    });
+});
 
-//tristyns route closed
+app.get("/school/:id/thread/:thread", isAuthenticated, (req, res) => {
+  console.log(req.params);
+  db.thread
+    .findOne({ where: { highschool_id: req.params.id, id: req.params.thread } })
+    .then((results) => {
+      results.destroy();
+      // res.send(results)
+      res.redirect(`/school/${req.params.id}`);
+    });
+});
 
 
 
-// ------TEST ROUTES (NEED TO BE INCORPORATED INTO FINAL ROUTES)------
+app.post("/update-password", isAuthenticated, (req, res) => {
+  // console.log(req.body);
+  db.user
+    .update(
+      { password: encryptPassword(req.body.password) },
+      { where: {
+          id: req.body.user_id,
+        },
+      }
+    )
+    .then((user) => {
+      res.redirect("/login");
+    });
+});
+
+app.get("/update-password", isAuthenticated, (req, res) => {
+  res.render("updatepassword", {
+    user: req.session.user,
+    active: { search: true },
+  });
+});
+
 // Main Page Routes
 app.get("/", (req, res) => {
   res.render("home", {
@@ -193,7 +142,6 @@ app.get("/search", isAuthenticated, (req, res) => {
 });
 
 // Sign-Up Routes
-
 app.get("/sign-up", (req, res) => {
   if (req.session.user) {
     res.redirect("/");
@@ -234,18 +182,12 @@ app.get("/api/search/:name", isAuthenticated, (req, res) => {
         schools = results.map((school) => school.toJSON());
         console.log(schools);
         res.json(schools);
-        // res.render("search", {
-        //   schools: schools,
-        //   listExists: true,
-        //   active: { search: true },
-        // });
       } else {
         res.status(404).json(`No School found matching ${schoolName}`);
       }
     });
 });
 
-// -----Routes-----
 
 
 // GET All schools
@@ -255,21 +197,6 @@ app.get("/api/school", isAuthenticated, function (request, response, next) {
   });
   response.send();
 });
-// app.get("/api/school/:id", isAuthenticated, function (request, response, next) {
-//   console.log("someone sent a request home");
-//   response.send();
-// });
-
-// app.post("/api/alumni", isAuthenticated, function (request, response, next) {
-//   console.log("someone sent a request home");
-//   response.send();
-// });
-
-// app.post("/api/alumni/:id", isAuthenticated, function (request, response, next) {
-//   console.log("someone sent a request home");
-//   response.send();
-// });
-
 
 // Login Routes
 app.get("/logout", (req, res) => {
@@ -278,8 +205,6 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log(req.body.username, req.body.password);
-
   if (req.body.username && req.body.password) {
     db.user
       .findOne({
