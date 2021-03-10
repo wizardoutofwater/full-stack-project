@@ -55,7 +55,7 @@ app.get("/school/:id", isAuthenticated, (req, res) => {
   db.highschool.findOne({ where: { id: req.params.id } }).then((results) => {
     let school = results.dataValues;
     let schoolID = school.id;
-    console.log(schoolID);
+    // console.log(schoolID);
     db.thread
       .findAll({ where: { highschool_id: schoolID } })
       .then((results) => {
@@ -85,13 +85,19 @@ app.post("/school/:id/thread", isAuthenticated, (req, res) => {
 });
 
 app.get("/school/:id/thread/:thread", isAuthenticated, (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
+  // console.log("session" + req.session);
   db.thread
     .findOne({ where: { highschool_id: req.params.id, id: req.params.thread } })
     .then((results) => {
-      results.destroy();
-      // res.send(results)
-      res.redirect(`/school/${req.params.id}`);
+      if(req.session.user.id == results.dataValues.user_id) {
+        results.destroy();
+        res.redirect(`/school/${req.params.id}`);
+      } else {
+        res.status(401).send("not authorized to delete other users posts")
+      }
+      // console.log(results)
+      
     });
 });
 
@@ -157,7 +163,9 @@ app.post("/sign-up", (req, res) => {
         password: encryptPassword(req.body.password),
       })
       .then((user) => {
-        res.redirect("/login");
+        req.session.user = user;
+        res.redirect("/search");
+        // res.redirect("/login");
       });
   } else {
     res.send(" please send username and password.");

@@ -122,8 +122,13 @@ body {
 
 /* Forms + Inputs */
 
+.form-control, .form-control-input {
+  color: #e8eddf;
+}
+
 .form-control:focus {
   box-shadow: none;
+  color: #e8eddf;
 }
 
 .loginForm {
@@ -221,6 +226,10 @@ body {
   background-color: #e8eddf;
   border: 0.05rem solid #CFDBD5;
   border-radius: .5em;
+}
+
+.school-card a:hover {
+  color: #333533;
 }
 
 .deleteLink {
