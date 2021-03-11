@@ -10,9 +10,10 @@
  
      
         <input id="title-input" name="title" type="text" placeholder="Title your post!"
-          class="form-control form-control-underlined">
-          <input id="thread-input" name="content" type="text" placeholder="Share your memories here!"
-          class="form-control form-control-underlined">
+          class="form-control form-control-underlined" requiredm autofocus>
+          <input maxlength="255" id="thread-input" name="content" type="text" placeholder="Share your memories here!"
+          class="form-control form-control-underlined"required>
+          <small class="form-text text-muted">max length 255 characters</small>
            <input type="hidden" id="user_id-input" name="user_id" value="{{user.id}}">
    
         <button type="submit" id="threadsubmitButton"
@@ -25,7 +26,7 @@
 <div id = "threadResults">
 {{#each thread}}
 
-     <div class="card mb-4 shadow-6" id="{{highschool.name}}" >  
+     <div class="card thread-card mb-4 shadow-6" id="{{highschool.name}}" >  
         <div class="card-body">
             <div class="lead text-center">{{this.title}}</div>
                   <div class="text-center">
@@ -40,7 +41,7 @@
 
 
 
-  {{> footer}}
+  {{> footer user=user}}
 </div>
 
 
