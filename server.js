@@ -105,6 +105,7 @@ app.get("/school/:id/thread/:thread", isAuthenticated, (req, res) => {
 
 app.post("/update-password", isAuthenticated, (req, res) => {
   // console.log(req.body);
+  
   db.user
     .update(
       { password: encryptPassword(req.body.password) },
@@ -164,7 +165,7 @@ app.post("/sign-up", (req, res) => {
       })
       .then((user) => {
         req.session.user = user;
-        res.redirect("/search");
+        res.redirect("/sign-up/complete");
         // res.redirect("/login");
       });
   } else {
@@ -172,36 +173,12 @@ app.post("/sign-up", (req, res) => {
   }
 });
 
-// Search Route
-
-app.get("/api/search/:name", isAuthenticated, (req, res) => {
-  let schoolName = req.params.name;
-  db.highschool
-    .findAll({
-      where: {
-        name: {
-          [Op.iLike]: `%${schoolName}%`,
-        },
-      },
-    })
-    .then((results) => {
-      if (results !== undefined && results.length != 0) {
-        // console.log(results);
-        schools = results.map((school) => school.toJSON());
-        console.log(schools);
-        res.json(schools);
-      } else {
-        res.status(404).json(`No School found matching ${schoolName}`);
-      }
-    });
-});
-
 // -----Routes-----
 // complete profile routes
-app.get("/sign-up/complete", (req, res) => {
+app.get("/sign-up/complete", isAuthenticated, (req, res) => {
   res.render("create-profile", {
     user: req.session.user,
-    active: { login: true },
+    active: { profile: true },
   });
 });
 
@@ -229,6 +206,30 @@ app.get("/api/school/all", (req, res) => {
     res.json(schools);
   });
 
+});
+
+// Search Route
+
+app.get("/api/search/:name", isAuthenticated, (req, res) => {
+  let schoolName = req.params.name;
+  db.highschool
+    .findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${schoolName}%`,
+        },
+      },
+    })
+    .then((results) => {
+      if (results !== undefined && results.length != 0) {
+        // console.log(results);
+        schools = results.map((school) => school.toJSON());
+        console.log(schools);
+        res.json(schools);
+      } else {
+        res.status(404).json(`No School found matching ${schoolName}`);
+      }
+    });
 });
 
 // Login Routes

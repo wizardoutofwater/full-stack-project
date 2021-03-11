@@ -1,8 +1,9 @@
   <header class="masthead mb-auto">
       <div class="inner">
-        <h3 class="masthead-brand brand">re:union</h3>
+        <h3 class="masthead-brand brand"><a class="brand-link" href="/">re:union</a></h3>
         <nav class="nav nav-masthead justify-content-center">
          {{#if user}}
+          <a class="nav-link {{#if active.profile}}active{{/if}} search" href="/{{user.id}}/profile">Profile</a>
           <a class="nav-link {{#if active.search}}active{{/if}} search" href="/search">Search</a>
           <a class="nav-link {{#if active.login}}active{{/if}} login" href="/logout">Logout</a>
           {{else}}

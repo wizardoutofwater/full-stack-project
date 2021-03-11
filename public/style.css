@@ -168,6 +168,10 @@ body {
   margin-bottom: 0;
 }
 
+.brand-link, .brand-link:hover {
+  text-decoration: none;
+}
+
 .nav-masthead .nav-link {
   padding: 0.25rem 0;
   font-weight: bold;
