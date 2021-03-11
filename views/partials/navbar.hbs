@@ -1,15 +1,26 @@
-  <header class="masthead mb-auto">
-      <div class="inner">
-        <h3 class="masthead-brand brand"><a class="brand-link" href="/">re:union</a></h3>
-        <nav class="nav nav-masthead justify-content-center">
-         {{#if user}}
-          <a class="nav-link {{#if active.profile}}active{{/if}} search" href="/{{user.id}}/profile">Profile</a>
-          <a class="nav-link {{#if active.search}}active{{/if}} search" href="/search">Search</a>
-          <a class="nav-link {{#if active.login}}active{{/if}} login" href="/logout">Logout</a>
-          {{else}}
-          <a class="nav-link {{#if active.home}}active{{/if}} home" href="/">Home</a>
-          <a class="nav-link {{#if active.login}}active{{/if}} login" href="/login">Login</a>
-          {{/if}}
-        </nav>
+<header class="masthead mb-auto">
+  <div class="inner">
+    <h3 class="masthead-brand brand"><a class="brand-link" href="/">re:union</a></h3>
+    <nav class="nav nav-masthead justify-content-center">
+      {{#if user}}
+
+      <a class="nav-link {{#if active.search}}active{{/if}} search" href="/search">Search</a>
+     
+      <div class="dropdown">
+      <a class=" nav-link dropdown-toggle {{#if active.profile}}active{{/if}} Profile" data-toggle="dropdown" href="/{{user.id}}/profile">Profile</a>
+      <ul class="dropdown-menu">
+        <li><a href="#">HTML</a></li>
+        <li><a href="#">CSS</a></li>
+        <li><a href="#">JavaScript</a></li>
+        <li class="divider"></li>
+        <li> <a class="nav-link {{#if active.login}}active{{/if}} login" href="/logout">Logout</a></li>
+      </ul>
       </div>
-    </header>
+
+      {{else}}
+      <a class="nav-link {{#if active.home}}active{{/if}} home" href="/">Home</a>
+      <a class="nav-link {{#if active.login}}active{{/if}} login" href="/login">Login</a>
+      {{/if}}
+    </nav>
+  </div>
+</header>

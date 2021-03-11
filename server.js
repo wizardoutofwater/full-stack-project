@@ -175,7 +175,7 @@ app.post("/sign-up", (req, res) => {
 
 // -----Routes-----
 // complete profile routes
-app.get("/sign-up/complete", isAuthenticated, (req, res) => {
+app.get("/sign-up/complete", (req, res) => {  // add isAuthenticated back after testing
   res.render("create-profile", {
     user: req.session.user,
     active: { profile: true },
