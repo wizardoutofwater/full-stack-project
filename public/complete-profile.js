@@ -16,7 +16,7 @@ $(document).ready(function () {
     });
     $dropDownYear.change(function () {
         $gradYear = $(this).val();
-        console.log($schoolId);
+        console.log($gradYear);
     
          // add code here to update input (hidden)
     });

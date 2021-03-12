@@ -125,7 +125,9 @@ body {
 .form-control, .form-control-input {
   color: #e8eddf;
 }
-
+.form-dropdown, .form-dropdown:focus {
+  background-color: transparent;
+}
 .form-control:focus {
   box-shadow: none;
   color: #e8eddf;
