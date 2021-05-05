@@ -1,4 +1,5 @@
-# full-stack-project
+# re:union
+## A full stack project for DigitalCrafts 
 
 The app allows users to re-connect with their network of classmates and alumni. Users will be able to sign-in, search by high school and be provided with information concerning that schools alumni. 
 
